@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-bool *crible_sequentiel(int n)
+bool *crible_parallele(int n)
 {
     bool *is_prime = (bool *)malloc((n + 1) * sizeof(bool));
     for (int i = 0; i <= n; i++)
@@ -36,7 +36,7 @@ void afficher_premiers(bool *is_prime, int n)
 int main()
 {
     int n = 20;
-    bool *is_prime = crible_sequentiel(n);
+    bool *is_prime = crible_parallele(n);
     afficher_premiers(is_prime, n);
     free(is_prime);
     return 0;
