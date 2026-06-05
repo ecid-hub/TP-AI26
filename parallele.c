@@ -80,9 +80,17 @@ void afficher_premiers(bool *is_prime, int n)
     printf("\n");
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    int n = 20;
+    int n;
+    if (argc != 2)
+    {
+        n = 20;
+    }
+    else
+    {
+        n = atoi(argv[1]);
+    }
     bool *is_prime = crible_parallele(n);
     afficher_premiers(is_prime, n);
     free(is_prime);
