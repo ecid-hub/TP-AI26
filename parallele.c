@@ -32,45 +32,37 @@ bool *crible_parallele(int n)
 
     for (int i = 2; i * i <= n; i++)
     {
-
         if (is_prime[i])
         {
-            // Thread initialization
             pthread_t thread_tab[THREAD_MAX_NUMBER];
             int val = i * i;
             int step = i;
-            int nb_elem = (n - i * i + 1) / i;
-            int modulo = (nb_elem % (THREAD_MAX_NUMBER - 1));
+            int nb_elem = (n - val) / step + 1; // Nombre total d'éléments à marquer
+            int len_per_thread = nb_elem / THREAD_MAX_NUMBER;
+            int remainder = nb_elem % THREAD_MAX_NUMBER;
+
+            // Allouer un tableau d'arguments pour chaque thread
+            thread_struct *t_args = malloc(THREAD_MAX_NUMBER * sizeof(thread_struct));
+
             for (int thread_number = 0; thread_number < THREAD_MAX_NUMBER; thread_number++)
             {
-                thread_struct t_args;
-                t_args.tab = is_prime;
-                t_args.index = val;
-                t_args.iterator = i;
-                if (thread_number != THREAD_MAX_NUMBER - 1)
-                {
-                    t_args.len = (nb_elem / (THREAD_MAX_NUMBER - 1));
-                    int is = pthread_create(&thread_tab[i], NULL, &crible_range, (void *)&t_args);
-                }
-                else
-                {
-                    if (modulo != 0)
-                    {
-                        t_args.len = modulo;
-                        int is = pthread_create(&thread_tab[i], NULL, &crible_range, (void *)&t_args);
-                    }
-                }
-                val += step * i;
+                t_args[thread_number].tab = is_prime;
+                t_args[thread_number].index = val + thread_number * len_per_thread * step;
+                t_args[thread_number].iterator = step;
+                t_args[thread_number].len = len_per_thread;
+                if (thread_number < remainder)
+                    t_args[thread_number].len++; // Distribuer le reste
+
+                pthread_create(&thread_tab[thread_number], NULL, &crible_range, (void *)&t_args[thread_number]);
             }
 
-            // Synchro fin
+            // Attendre la fin de tous les threads
             for (int thread_number = 0; thread_number < THREAD_MAX_NUMBER; thread_number++)
             {
-                void *ret;
-                int is = pthread_join(thread_tab[thread_number], ret);
-
-                printf("IsS : %i", is);
+                pthread_join(thread_tab[thread_number], NULL);
             }
+
+            free(t_args); // Libérer la mémoire allouée pour les arguments
         }
     }
 
