@@ -37,11 +37,10 @@ bool *crible_parallele(int n)
             pthread_t thread_tab[THREAD_MAX_NUMBER];
             int val = i * i;
             int step = i;
-            int nb_elem = (n - val) / step + 1; // Nombre total d'éléments à marquer
+            int nb_elem = (n - val) / step + 1;
             int len_per_thread = nb_elem / THREAD_MAX_NUMBER;
             int remainder = nb_elem % THREAD_MAX_NUMBER;
 
-            // Allouer un tableau d'arguments pour chaque thread
             thread_struct *t_args = malloc(THREAD_MAX_NUMBER * sizeof(thread_struct));
 
             for (int thread_number = 0; thread_number < THREAD_MAX_NUMBER; thread_number++)
@@ -51,18 +50,17 @@ bool *crible_parallele(int n)
                 t_args[thread_number].iterator = step;
                 t_args[thread_number].len = len_per_thread;
                 if (thread_number < remainder)
-                    t_args[thread_number].len++; // Distribuer le reste
+                    t_args[thread_number].len++;
 
                 pthread_create(&thread_tab[thread_number], NULL, &crible_range, (void *)&t_args[thread_number]);
             }
 
-            // Attendre la fin de tous les threads
             for (int thread_number = 0; thread_number < THREAD_MAX_NUMBER; thread_number++)
             {
                 pthread_join(thread_tab[thread_number], NULL);
             }
 
-            free(t_args); // Libérer la mémoire allouée pour les arguments
+            free(t_args);
         }
     }
 
