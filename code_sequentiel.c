@@ -33,11 +33,29 @@ void afficher_premiers(bool *is_prime, int n)
     printf("\n");
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    int n = 20;
+    long long n;
+    if (argc != 2)
+    {
+        n = 20;
+    }
+    else
+    {
+        n = atoll(argv[1]);
+    }
+
     bool *is_prime = crible_parallele(n);
-    afficher_premiers(is_prime, n);
+
+    if (n <= 1000)
+    {
+        afficher_premiers(is_prime, n);
+    }
+    else
+    {
+        printf("Calcul terminé avec succès pour n = %lld.\n", n);
+    }
+
     free(is_prime);
     return 0;
 }

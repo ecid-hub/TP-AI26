@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 
-#define THREAD_MAX_NUMBER 5
+#define THREAD_MAX_NUMBER 7
 
 typedef struct thread_struct
 {
