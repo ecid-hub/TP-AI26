@@ -34,15 +34,23 @@ bool *crible_parallele(long long n)
         exit(EXIT_FAILURE);
     }
 
+    // Optimization of loop to not treat the even numbers
     for (long long i = 0; i <= n; i++)
-        is_prime[i] = true;
+        if (n % 2 == 0 && n != 0)
+        {
+            is_prime[i] = false;
+        }
+        else
+        {
+            is_prime[i] = true;
+        }
 
     if (n >= 0)
         is_prime[0] = false;
     if (n >= 1)
         is_prime[1] = false;
 
-    for (long long i = 2; i * i <= n; i++)
+    for (long long i = 3; i * i <= n; i += 2)
     {
         if (is_prime[i])
         {
