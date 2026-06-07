@@ -12,16 +12,18 @@ import json
 import matplotlib.pyplot as plt
 import numpy as np
 
-fichiers_json = [
-    "../datas/sequentiel.json",
-    "../datas/parallele_1.json",
-    "../datas/parallele_2.json",
-    "../datas/parallele_3.json",
-    "../datas/parallele_4.json",
-    "../datas/parallele_5.json",
-    "../datas/parallele_6.json",
-    "../datas/parallele_7.json",
-]
+# fichiers_json = [
+#     "../datas/sequentiel.json",
+#     "../datas/parallele_1.json",
+#     "../datas/parallele_2.json",
+#     "../datas/parallele_3.json",
+#     "../datas/parallele_4.json",
+#     "../datas/parallele_5.json",
+#     "../datas/parallele_6.json",
+#     "../datas/parallele_7.json",
+# ]
+fichiers_json = ["../datas/parallele_7.json", "../datas/parallele_opti_7.json"]
+
 
 commands = []
 means = []
@@ -83,5 +85,5 @@ plt.grid(axis="y", linestyle="--", alpha=0.5)
 plt.tight_layout()
 
 # Display or save
-plt.savefig("comparaison_benchmarks_before_opti.png", dpi=300)
+plt.savefig("comparaison_benchmarks_before_and_after_opti.png", dpi=300)
 plt.show()
