@@ -32,7 +32,6 @@ bool *crible_parallele(long long n)
         exit(EXIT_FAILURE);
     }
 
-    // Initialisation correcte : tester `i` et non `n`
     for (long long i = 0; i <= n; i++)
         is_prime[i] = (i % 2 != 0 || i == 2);
 
