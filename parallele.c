@@ -13,11 +13,9 @@ typedef struct thread_struct
     long long step;
 } thread_struct;
 
-// Thread function
 void *crible_range(void *arguments)
 {
     thread_struct *args = (thread_struct *)arguments;
-
     for (long long i = args->start_index; i <= args->max_n; i += args->step)
     {
         args->tab[i] = false;
@@ -34,16 +32,8 @@ bool *crible_parallele(long long n)
         exit(EXIT_FAILURE);
     }
 
-    // Optimization of loop to not treat the even numbers
     for (long long i = 0; i <= n; i++)
-        if (n % 2 == 0 && n != 0)
-        {
-            is_prime[i] = false;
-        }
-        else
-        {
-            is_prime[i] = true;
-        }
+        is_prime[i] = (i % 2 != 0 || i == 2);
 
     if (n >= 0)
         is_prime[0] = false;
@@ -56,7 +46,6 @@ bool *crible_parallele(long long n)
         {
             pthread_t thread_tab[THREAD_MAX_NUMBER];
             thread_struct t_args[THREAD_MAX_NUMBER];
-
             long long first_multiple = i * i;
             long long global_step = i * THREAD_MAX_NUMBER;
 
@@ -86,7 +75,6 @@ bool *crible_parallele(long long n)
             }
         }
     }
-
     return is_prime;
 }
 
@@ -105,24 +93,16 @@ int main(int argc, char *argv[])
 {
     long long n;
     if (argc != 2)
-    {
         n = 20;
-    }
     else
-    {
         n = atoll(argv[1]);
-    }
 
     bool *is_prime = crible_parallele(n);
 
     if (n <= 1000)
-    {
         afficher_premiers(is_prime, n);
-    }
     else
-    {
         printf("Calcul terminé avec succès pour n = %lld.\n", n);
-    }
 
     free(is_prime);
     return 0;
