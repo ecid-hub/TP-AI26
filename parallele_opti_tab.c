@@ -5,6 +5,8 @@
 
 #define THREAD_MAX_NUMBER 7
 
+// Struct used in thread instanctiation
+// Contain everything to explore a part of a tab concurrently
 typedef struct thread_struct
 {
     bool *tab;
@@ -17,6 +19,8 @@ pthread_t thread_tab[THREAD_MAX_NUMBER];
 thread_struct t_args[THREAD_MAX_NUMBER];
 
 // Thread function
+// In the table, check from start_index to max_n with steps.
+// Set false any corresponding value
 void *crible_range(void *arguments)
 {
     thread_struct *args = (thread_struct *)arguments;
@@ -28,6 +32,9 @@ void *crible_range(void *arguments)
     return NULL;
 }
 
+// Create the is_prime[n] concurrently
+// Allocate is_prime, set 0, 1 and even (except 2) numbers to false
+// Then go over each value and concurrently mark as false the multiples
 bool *crible_parallele(long long n)
 {
     if (n < 2)
@@ -94,6 +101,7 @@ bool *crible_parallele(long long n)
     return is_prime;
 }
 
+// Display until n the elements of prime[length]
 void afficher_premiers(bool *is_prime, long long n)
 {
     if (n >= 2)
@@ -113,6 +121,8 @@ void afficher_premiers(bool *is_prime, long long n)
 int main(int argc, char *argv[])
 {
     long long n;
+
+    // Argc/argv treatement
     if (argc != 2)
     {
         n = 20;
@@ -124,6 +134,7 @@ int main(int argc, char *argv[])
 
     bool *is_prime = crible_parallele(n);
 
+    // Don't display if n is too high
     if (n <= 1000)
     {
         afficher_premiers(is_prime, n);

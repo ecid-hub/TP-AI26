@@ -5,6 +5,8 @@
 
 #define THREAD_MAX_NUMBER 7
 
+// Struct used in thread instanctiation
+// Contain everything to explore a part of a tab concurrently
 typedef struct thread_struct
 {
     bool *tab;
@@ -13,6 +15,9 @@ typedef struct thread_struct
     long long step;
 } thread_struct;
 
+// Thread function
+// In the table, check from start_index to max_n with steps.
+// Set false any corresponding value
 void *crible_range(void *arguments)
 {
     thread_struct *args = (thread_struct *)arguments;
@@ -23,6 +28,9 @@ void *crible_range(void *arguments)
     return NULL;
 }
 
+// Create the is_prime[n] concurrently
+// Allocate is_prime, set 0, 1 and even (except 2) numbers to false
+// Then go over each value and concurrently mark as false the multiples
 bool *crible_parallele(long long n)
 {
     bool *is_prime = (bool *)malloc((n + 1) * sizeof(bool));
@@ -40,6 +48,7 @@ bool *crible_parallele(long long n)
     if (n >= 1)
         is_prime[1] = false;
 
+    // Start at 3 and ignore even numbers
     for (long long i = 3; i * i <= n; i += 2)
     {
         if (is_prime[i])
@@ -56,6 +65,7 @@ bool *crible_parallele(long long n)
                 t_args[thread_number].start_index = first_multiple + (thread_number * i);
                 t_args[thread_number].step = global_step;
 
+                // Each threads go over a multiple, and repeat until we reach the end
                 if (t_args[thread_number].start_index <= n)
                 {
                     pthread_create(&thread_tab[thread_number], NULL, &crible_range, (void *)&t_args[thread_number]);
@@ -66,6 +76,7 @@ bool *crible_parallele(long long n)
                 }
             }
 
+            // Wait to the end of each thread
             for (int thread_number = 0; thread_number < THREAD_MAX_NUMBER; thread_number++)
             {
                 if (thread_tab[thread_number] != 0)
@@ -78,6 +89,7 @@ bool *crible_parallele(long long n)
     return is_prime;
 }
 
+// Display until n the elements of prime[length]
 void afficher_premiers(bool *is_prime, long long n)
 {
     printf("Nombres premiers jusqu'à %lld :\n", n);
@@ -92,6 +104,8 @@ void afficher_premiers(bool *is_prime, long long n)
 int main(int argc, char *argv[])
 {
     long long n;
+
+    // Argc/argv treatement
     if (argc != 2)
         n = 20;
     else
@@ -99,6 +113,7 @@ int main(int argc, char *argv[])
 
     bool *is_prime = crible_parallele(n);
 
+    // Don't display if n is too high
     if (n <= 1000)
         afficher_premiers(is_prime, n);
     else

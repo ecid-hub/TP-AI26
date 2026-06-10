@@ -1,13 +1,3 @@
-#!/usr/bin/env python
-# /// script
-# requires-python = ">=3.10"
-# dependencies = [
-#      "matplotlib",
-#      "pyqt6",
-#      "numpy",
-# ]
-# ///
-
 import json
 import matplotlib.pyplot as plt
 import numpy as np
@@ -40,7 +30,7 @@ for paths in fichiers_json:
         means.append(res["mean"])
         stddevs.append(res["stddev"])
 
-# 3. Create graphique
+# Create graphique
 plt.figure(figsize=(12, 6))
 
 x_pos = np.arange(len(commands))

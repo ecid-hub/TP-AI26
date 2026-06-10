@@ -2,7 +2,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-bool *crible_parallele(int n)
+// Create a new is_prime[n] table containing bools
+// Initially all values are true except 0 and 1
+// Force each value, set to false their multiple
+// Return the table is_prime[n]
+bool *crible_sequentiel(int n)
 {
     bool *is_prime = (bool *)malloc((n + 1) * sizeof(bool));
     for (int i = 0; i <= n; i++)
@@ -22,6 +26,7 @@ bool *crible_parallele(int n)
     return is_prime;
 }
 
+// Display all values set to true in is_prime[length] until n
 void afficher_premiers(bool *is_prime, int n)
 {
     printf("Nombres premiers jusqu'à %d :\n", n);
@@ -36,6 +41,7 @@ void afficher_premiers(bool *is_prime, int n)
 int main(int argc, char *argv[])
 {
     long long n;
+    // Argc/argv handling
     if (argc != 2)
     {
         n = 20;
@@ -45,8 +51,9 @@ int main(int argc, char *argv[])
         n = atoll(argv[1]);
     }
 
-    bool *is_prime = crible_parallele(n);
+    bool *is_prime = crible_sequentiel(n);
 
+    // Don't display if too much values
     if (n <= 1000)
     {
         afficher_premiers(is_prime, n);
@@ -56,6 +63,7 @@ int main(int argc, char *argv[])
         printf("Calcul terminé avec succès pour n = %lld.\n", n);
     }
 
+    // free is_prime[] allocated in crible_sequentiel
     free(is_prime);
     return 0;
 }
